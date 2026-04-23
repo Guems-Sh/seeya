@@ -60,11 +60,15 @@ export async function GET(request: NextRequest) {
     return NextResponse.redirect(dest)
   }
 
-  // Existing user: process invitation token immediately
+  // Existing user: process invitation token + send notification to inviter
   if (token) {
-    await supabase.rpc('join_via_invitation', {
-      p_token: token,
-      p_user_id: user.id,
+    await fetch(new URL('/api/invitations/use', origin).toString(), {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Cookie: request.headers.get('cookie') ?? '',
+      },
+      body: JSON.stringify({ token }),
     })
   }
 

@@ -144,11 +144,12 @@ function OnboardingContent() {
       }
     }
 
-    // Process invitation token if user arrived via an invite link
+    // Process invitation token + notify inviter
     if (invitationToken) {
-      await supabase.rpc('join_via_invitation', {
-        p_token: invitationToken,
-        p_user_id: user.id,
+      await fetch('/api/invitations/use', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ token: invitationToken }),
       })
     }
 
