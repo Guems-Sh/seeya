@@ -44,3 +44,30 @@ h5,
 h6 {
   font-weight: 700;
 }
+
+/* Mobile — remove tap highlight flash */
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Mobile — prevent overscroll bounce on the root */
+html,
+body {
+  overscroll-behavior: none;
+}
+
+/* Mobile — prevent input zoom on iOS (font-size must be ≥ 16px) */
+input,
+select,
+textarea {
+  font-size: 16px;
+}
+
+/* Safe area insets for notch / home indicator */
+.safe-bottom {
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+.safe-top {
+  padding-top: env(safe-area-inset-top, 0px);
+}

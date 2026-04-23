@@ -3,12 +3,14 @@
 import { usePathname } from 'next/navigation';
 import Link from 'next/link';
 import { ReactNode } from 'react';
+import PushPermissionPrompt from '@/components/notifications/PushPermissionPrompt';
 
 const BOTTOM_NAV_ITEMS = [
-  { href: '/', label: 'Home', icon: '🏠' },
-  { href: '/explore', label: 'Explore', icon: '🔍' },
-  { href: '/create', label: 'Drop', icon: '📍' },
-  { href: '/profile', label: 'Me', icon: '👤' },
+  { href: '/', label: 'CARTE', icon: '🗺' },
+  { href: '/explore', label: 'MATCHS', icon: '⚡' },
+  { href: '/create', label: 'DROP', icon: '📍' },
+  { href: '/inbox', label: 'INBOX', icon: '📬' },
+  { href: '/profile', label: 'MOI', icon: '👤' },
 ];
 
 export default function AppLayout({ children }: { children: ReactNode }) {
@@ -38,27 +40,33 @@ export default function AppLayout({ children }: { children: ReactNode }) {
       </aside>
 
       {/* Main Content Area */}
-      <main className="flex-1 overflow-y-auto bg-black pb-24 md:pb-0">
+      <main className="flex-1 overflow-hidden bg-black">
         {children}
       </main>
 
       {/* Bottom Navigation - Mobile Only */}
-      <nav className="fixed bottom-0 left-0 right-0 flex border-t-2 border-[#333333] bg-black md:hidden">
-        {BOTTOM_NAV_ITEMS.map((item) => (
-          <Link
-            key={item.href}
-            href={item.href}
-            className={`flex flex-1 flex-col items-center gap-1 border-r-2 border-[#333333] px-3 py-4 font-bold text-xs transition-colors last:border-r-0 ${
-              pathname === item.href
-                ? 'bg-[#CCFF00] text-black'
-                : 'text-white hover:bg-[#1A1A1A]'
-            }`}
-          >
-            <span className="text-lg">{item.icon}</span>
-            <span>{item.label}</span>
-          </Link>
-        ))}
+      <nav className="fixed bottom-0 left-0 right-0 flex flex-col border-t-2 border-[#333333] bg-black md:hidden">
+        <div className="flex">
+          {BOTTOM_NAV_ITEMS.map((item) => (
+            <Link
+              key={item.href}
+              href={item.href}
+              className={`flex flex-1 flex-col items-center gap-1 border-r-2 border-[#333333] px-3 py-4 font-bold text-xs transition-colors last:border-r-0 ${
+                pathname === item.href
+                  ? 'bg-[#CCFF00] text-black'
+                  : 'text-white hover:bg-[#1A1A1A]'
+              }`}
+            >
+              <span className="text-lg">{item.icon}</span>
+              <span>{item.label}</span>
+            </Link>
+          ))}
+        </div>
+        {/* Safe area spacer for iPhone home indicator */}
+        <div className="safe-bottom bg-black" />
       </nav>
+
+      <PushPermissionPrompt />
     </div>
   );
 }
