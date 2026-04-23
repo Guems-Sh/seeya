@@ -45,7 +45,7 @@ export default function AppLayout({ children }: { children: ReactNode }) {
       </main>
 
       {/* Bottom Navigation — Mobile */}
-      <nav className="fixed bottom-0 left-0 right-0 flex flex-col border-t-2 border-black bg-white md:hidden">
+      <nav className="fixed bottom-0 left-0 right-0 z-40 flex flex-col border-t-2 border-black bg-white md:hidden">
         <div className="flex items-stretch">
           {BOTTOM_NAV_ITEMS.map((item) => {
             const active = pathname === item.href;
