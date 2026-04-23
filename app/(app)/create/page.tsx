@@ -1,8 +1,7 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
-import { useCircles } from '@/hooks/useCircles'
 import type { MoodType } from '@/lib/supabase/types'
 
 const MOODS: { value: MoodType; label: string }[] = [
@@ -22,12 +21,18 @@ const ARRONDISSEMENT_LABELS: Record<number, string> = {
 
 type EventType = 'planned' | 'spontaneous'
 
+interface CircleWithCount {
+  id: string
+  name: string
+  member_count: number
+}
+
 export default function CreatePage() {
   const router = useRouter()
-  const { circles } = useCircles()
 
   const today = new Date().toISOString().split('T')[0]
 
+  const [circles, setCircles] = useState<CircleWithCount[]>([])
   const [eventType, setEventType] = useState<EventType>('planned')
   const [mood, setMood] = useState<MoodType | null>(null)
   const [title, setTitle] = useState('')
@@ -41,6 +46,21 @@ export default function CreatePage() {
   const [targetCircles, setTargetCircles] = useState<string[]>([])
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
+
+  useEffect(() => {
+    fetch('/api/circles')
+      .then((r) => r.json())
+      .then((data: Array<{ id: string; name: string; circle_members: unknown[] }>) => {
+        setCircles(
+          data.map((c) => ({
+            id: c.id,
+            name: c.name,
+            member_count: Math.max(0, (c.circle_members?.length ?? 1) - 1), // exclude self
+          }))
+        )
+      })
+      .catch(() => {})
+  }, [])
 
   function toggleCircle(id: string) {
     setTargetCircles((prev) =>
@@ -88,26 +108,33 @@ export default function CreatePage() {
 
     if (res.ok) {
       const event = await res.json()
-      router.push(`/events/${event.id}`)
+      if (eventType === 'spontaneous') {
+        // Show the live pin on the map immediately
+        router.push('/')
+      } else {
+        router.push(`/events/${event.id}`)
+      }
     } else {
       const data = await res.json()
       const msgs = data.error?.fieldErrors
         ? Object.values(data.error.fieldErrors).flat().join(' · ')
         : data.error ?? 'Erreur lors de la création.'
-      setError(msgs)
+      setError(typeof msgs === 'string' ? msgs : JSON.stringify(msgs))
     }
     setLoading(false)
   }
 
+  // Total unique members that will be notified across selected circles
+  const notifiedCount = circles
+    .filter((c) => targetCircles.includes(c.id))
+    .reduce((acc, c) => acc + c.member_count, 0)
+
   return (
     <div className="h-full overflow-y-auto bg-white px-6 pb-32 pt-8">
       <div className="mx-auto max-w-93.75">
-        {/* Heading */}
         <div className="mb-8">
           <h1 className="text-[64px] font-black uppercase leading-none tracking-tight text-black">
-            DROP A
-            <br />
-            PIN
+            DROP A<br />PIN
           </h1>
           <p className="mt-3 text-sm font-bold text-[#666666]">Set up your next move.</p>
         </div>
@@ -146,7 +173,7 @@ export default function CreatePage() {
               <span className="text-lg">⚡</span>
             </div>
             <p className={`mt-1.5 text-sm ${eventType === 'spontaneous' ? 'text-[#444444]' : 'text-[#666666]'}`}>
-              Flash drop. Live for the next few hours.
+              Flash drop. Live for 3 hours. Push sent immediately.
             </p>
           </button>
         </div>
@@ -175,24 +202,25 @@ export default function CreatePage() {
             </div>
           </div>
 
-          {/* Title */}
+          {/* Title (planned only) */}
           {eventType === 'planned' && (
             <div>
               <label className="mb-2 block text-xs font-black uppercase tracking-widest text-[#666666]">
-                EVENT TITLE
+                TITRE{' '}
+                <span className="font-normal normal-case tracking-normal text-[#AAAAAA]">(optionnel)</span>
               </label>
               <input
                 type="text"
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
-                placeholder="What's happening?"
+                placeholder="De quoi s'agit-il ?"
                 maxLength={100}
                 className="w-full border-2 border-black bg-white px-4 py-4 font-bold text-black outline-none placeholder:text-[#AAAAAA] focus:border-[#CCFF00] transition-colors"
               />
             </div>
           )}
 
-          {/* Date & time */}
+          {/* Date & time (planned only) */}
           {eventType === 'planned' && (
             <div className="grid grid-cols-2 gap-3">
               <div className="col-span-2">
@@ -245,18 +273,14 @@ export default function CreatePage() {
               onChange={(e) => setArrondissement(e.target.value ? parseInt(e.target.value) : null)}
               className="w-full border-2 border-black bg-white px-4 py-4 font-bold text-black outline-none focus:border-[#CCFF00] transition-colors appearance-none"
             >
-              <option value="" disabled className="text-[#AAAAAA]">
-                Sélectionne un arrondissement
-              </option>
+              <option value="" disabled>Sélectionne un arrondissement</option>
               {Array.from({ length: 20 }, (_, i) => i + 1).map((arr) => (
-                <option key={arr} value={arr}>
-                  Paris {ARRONDISSEMENT_LABELS[arr]}
-                </option>
+                <option key={arr} value={arr}>Paris {ARRONDISSEMENT_LABELS[arr]}</option>
               ))}
             </select>
           </div>
 
-          {/* Location */}
+          {/* Location details (planned only) */}
           {eventType === 'planned' && (
             <>
               <div>
@@ -272,12 +296,6 @@ export default function CreatePage() {
                   maxLength={200}
                   className="w-full border-2 border-black bg-white px-4 py-4 font-bold text-black outline-none placeholder:text-[#AAAAAA] focus:border-[#CCFF00] transition-colors"
                 />
-              </div>
-
-              <div className="flex h-36 items-center justify-center border-2 border-black bg-[#F5F5F5]">
-                <p className="text-xs font-black uppercase tracking-widest text-[#AAAAAA]">
-                  LOCALISATION
-                </p>
               </div>
 
               <div>
@@ -328,17 +346,33 @@ export default function CreatePage() {
                       key={circle.id}
                       type="button"
                       onClick={() => toggleCircle(circle.id)}
-                      className={`border-2 px-4 py-3 text-left text-sm font-black uppercase tracking-widest transition-colors ${
+                      className={`flex items-center justify-between border-2 px-4 py-3 text-left transition-colors ${
                         selected
                           ? 'border-black bg-[#CCFF00] text-black'
                           : 'border-black bg-white text-black hover:bg-[#F5F5F5]'
                       }`}
                     >
-                      {circle.name}
+                      <span className="text-sm font-black uppercase tracking-widest">
+                        {circle.name}
+                      </span>
+                      <span className="text-[10px] font-bold text-[#888888]">
+                        {circle.member_count} membre{circle.member_count !== 1 ? 's' : ''}
+                      </span>
                     </button>
                   )
                 })}
               </div>
+            )}
+
+            {targetCircles.length > 0 && notifiedCount > 0 && (
+              <p className="mt-2 text-[10px] font-black uppercase tracking-widest text-black">
+                {notifiedCount} personne{notifiedCount !== 1 ? 's' : ''} sera{notifiedCount !== 1 ? 'ont' : ''} notifiée{notifiedCount !== 1 ? 's' : ''}
+              </p>
+            )}
+            {targetCircles.length > 0 && notifiedCount === 0 && (
+              <p className="mt-2 text-[10px] font-black uppercase tracking-widest text-[#AAAAAA]">
+                Aucun membre dans ces cercles pour l'instant.
+              </p>
             )}
           </div>
 
