@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
+import Link from 'next/link'
 import { createClient } from '@/lib/supabase/client'
 import type { MoodType, AvailabilityType } from '@/lib/supabase/types'
 
@@ -316,6 +317,14 @@ export default function ProfilePage() {
             </button>
           )}
         </div>
+
+        {/* Slots */}
+        <Link
+          href="/slots"
+          className="block w-full border-2 border-black py-4 text-center text-xs font-black uppercase tracking-widest text-black transition-colors hover:bg-black hover:text-white"
+        >
+          MES CRÉNEAUX →
+        </Link>
 
         {/* Sign out */}
         <button
