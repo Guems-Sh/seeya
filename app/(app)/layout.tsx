@@ -9,7 +9,7 @@ const BOTTOM_NAV_ITEMS = [
   { href: '/', label: 'CARTE', icon: '⌂' },
   { href: '/circles', label: 'CERCLES', icon: '◎' },
   { href: '/create', label: 'DROP', icon: '+', isCenter: true },
-  { href: '/inbox', label: 'INBOX', icon: '✉' },
+  { href: '/inbox', label: 'ACTIVITÉ', icon: '✉' },
   { href: '/profile', label: 'MOI', icon: '◯' },
 ];
 
