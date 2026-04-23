@@ -48,13 +48,17 @@ export async function proxy(request: NextRequest) {
   }
 
   if (pathname !== '/onboarding') {
-    const { data: profile } = await supabase
+    const { data: profile, error: profileError } = await supabase
       .from('profiles')
       .select('first_name')
       .eq('id', user.id)
       .single()
 
-    if (!profile?.first_name) {
+    // Only redirect to onboarding when profile definitively doesn't exist (PGRST116 = no rows)
+    if (!profileError && !profile?.first_name) {
+      return NextResponse.redirect(new URL('/onboarding', request.url))
+    }
+    if (profileError?.code === 'PGRST116') {
       return NextResponse.redirect(new URL('/onboarding', request.url))
     }
   }

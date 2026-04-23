@@ -120,6 +120,11 @@ function OnboardingContent() {
     })
 
     if (profileError) {
+      // Profile already exists (duplicate key) → navigate directly
+      if (profileError.code === '23505') {
+        window.location.href = '/'
+        return
+      }
       setError(profileError.message)
       setLoading(false)
       return
