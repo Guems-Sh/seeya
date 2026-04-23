@@ -32,38 +32,38 @@ export default function LoginPage() {
 
   if (sent) {
     return (
-      <div className="w-full max-w-[375px]">
-        <h1 className="mb-4 text-6xl font-black uppercase leading-none tracking-tight text-white">
+      <div className="w-full max-w-93.75">
+        <h1 className="mb-4 text-6xl font-black uppercase leading-none tracking-tight text-black">
           CHECK
           <br />
           YOUR
           <br />
           MAIL.
         </h1>
-        <p className="text-[#999999]">
+        <p className="text-[#666666]">
           Magic link sent to{' '}
-          <span className="font-bold text-[#CCFF00]">{email}</span>
+          <span className="font-bold text-black">{email}</span>
         </p>
       </div>
     )
   }
 
   return (
-    <div className="w-full max-w-[375px]">
+    <div className="w-full max-w-93.75">
       <div className="mb-12">
-        <h1 className="text-6xl font-black uppercase leading-none tracking-tight text-white">
+        <h1 className="text-6xl font-black uppercase leading-none tracking-tight text-black">
           SEE
           <br />
           YA.
         </h1>
-        <p className="mt-4 text-sm font-bold uppercase tracking-wider text-[#999999]">
+        <p className="mt-4 text-sm font-bold uppercase tracking-wider text-[#666666]">
           Make plans happen.
         </p>
       </div>
 
       <form onSubmit={handleSubmit} className="flex flex-col gap-4">
         <div>
-          <label className="mb-2 block text-xs font-bold uppercase tracking-widest text-[#999999]">
+          <label className="mb-2 block text-xs font-black uppercase tracking-widest text-[#666666]">
             Email
           </label>
           <input
@@ -72,7 +72,7 @@ export default function LoginPage() {
             onChange={(e) => setEmail(e.target.value)}
             placeholder="ton@email.com"
             required
-            className="w-full border-2 border-[#333333] bg-[#1A1A1A] px-4 py-4 font-bold text-white outline-none placeholder:text-[#555555] focus:border-[#CCFF00] transition-colors"
+            className="w-full border-2 border-black bg-white px-4 py-4 font-bold text-black outline-none placeholder:text-[#AAAAAA] focus:border-[#CCFF00] transition-colors"
           />
         </div>
 
@@ -85,9 +85,9 @@ export default function LoginPage() {
         <button
           type="submit"
           disabled={loading || !email}
-          className="mt-2 border-2 border-[#CCFF00] bg-[#CCFF00] px-6 py-5 text-base font-black uppercase tracking-widest text-black transition-colors hover:bg-black hover:text-[#CCFF00] disabled:opacity-40 disabled:cursor-not-allowed"
+          className="mt-2 border-2 border-black bg-[#CCFF00] px-6 py-5 text-base font-black uppercase tracking-widest text-black shadow-[4px_4px_0_0_#000] transition-all hover:shadow-none disabled:opacity-40 disabled:cursor-not-allowed"
         >
-          {loading ? 'ENVOI...' : 'ENVOYER LE LIEN'}
+          {loading ? 'ENVOI...' : 'ENVOYER LE LIEN →'}
         </button>
       </form>
     </div>

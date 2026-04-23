@@ -1,12 +1,12 @@
 @import "tailwindcss";
 
 :root {
-  --background: #000000;
-  --foreground: #ffffff;
+  --background: #ffffff;
+  --foreground: #000000;
   --lime-accent: #ccff00;
-  --surface: #1a1a1a;
-  --border: #333333;
-  --text-secondary: #999999;
+  --surface: #ffffff;
+  --border: #000000;
+  --text-secondary: #666666;
 }
 
 @theme inline {
@@ -35,39 +35,34 @@ body {
   box-sizing: border-box;
 }
 
-/* Ensure headings are bold */
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
+h1, h2, h3, h4, h5, h6 {
   font-weight: 700;
 }
 
-/* Mobile — remove tap highlight flash */
 * {
   -webkit-tap-highlight-color: transparent;
 }
 
-/* Mobile — prevent overscroll bounce on the root */
-html,
-body {
+html, body {
   overscroll-behavior: none;
 }
 
-/* Mobile — prevent input zoom on iOS (font-size must be ≥ 16px) */
-input,
-select,
-textarea {
+input, select, textarea {
   font-size: 16px;
 }
 
-/* Safe area insets for notch / home indicator */
 .safe-bottom {
   padding-bottom: env(safe-area-inset-bottom, 0px);
 }
 
 .safe-top {
   padding-top: env(safe-area-inset-top, 0px);
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }

@@ -52,14 +52,14 @@ function Toggle({
       onClick={() => onChange(!checked)}
       disabled={disabled}
       className={`relative h-7 w-12 border-2 transition-colors disabled:opacity-40 ${
-        checked ? 'border-[#CCFF00] bg-[#CCFF00]' : 'border-[#333333] bg-[#1A1A1A]'
+        checked ? 'border-black bg-[#CCFF00]' : 'border-black bg-white'
       }`}
     >
       <span
         className={`absolute top-0.5 h-4 w-4 border-2 transition-transform ${
           checked
             ? 'translate-x-5.5 border-black bg-black'
-            : 'translate-x-0.5 border-[#555555] bg-[#555555]'
+            : 'translate-x-0.5 border-[#CCCCCC] bg-[#CCCCCC]'
         }`}
       />
     </button>
@@ -156,8 +156,8 @@ export default function ProfilePage() {
 
   if (loading) {
     return (
-      <div className="flex h-full items-center justify-center bg-black">
-        <p className="text-xs font-bold uppercase tracking-widest text-[#555555]">CHARGEMENT...</p>
+      <div className="flex h-full items-center justify-center bg-white">
+        <p className="text-xs font-black uppercase tracking-widest text-[#AAAAAA]">CHARGEMENT...</p>
       </div>
     )
   }
@@ -168,8 +168,11 @@ export default function ProfilePage() {
   const arrs = profile.preferred_arrondissements ?? []
 
   return (
-    <div className="h-full overflow-y-auto bg-black px-4 pb-28 pt-6">
+    <div className="h-full overflow-y-auto bg-white px-4 pb-28 pt-6">
       <div className="mx-auto max-w-93.75 flex flex-col gap-6">
+
+        {/* Header */}
+        <h1 className="text-[40px] font-black uppercase leading-none tracking-tight text-black">MOI</h1>
 
         {/* Identity */}
         <div className="flex items-center gap-4">
@@ -177,33 +180,33 @@ export default function ProfilePage() {
             <img
               src={profile.avatar_url}
               alt={profile.first_name}
-              className="h-16 w-16 rounded-full border-2 border-[#CCFF00] object-cover"
+              className="h-16 w-16 rounded-full border-2 border-black object-cover"
             />
           ) : (
-            <div className="flex h-16 w-16 items-center justify-center rounded-full border-2 border-[#CCFF00] bg-[#1A1A1A] text-2xl font-black text-white">
+            <div className="flex h-16 w-16 items-center justify-center rounded-full border-2 border-black bg-[#F5F5F5] text-2xl font-black text-black">
               {profile.first_name.charAt(0)}
             </div>
           )}
           <div>
-            <p className="text-2xl font-black uppercase text-white">
+            <p className="text-2xl font-black uppercase text-black">
               {profile.first_name} {profile.last_name_init}
             </p>
             {profile.bio && (
-              <p className="mt-0.5 text-xs text-[#999999]">{profile.bio}</p>
+              <p className="mt-0.5 text-xs text-[#666666]">{profile.bio}</p>
             )}
           </div>
         </div>
 
         {/* Status toggles */}
-        <div className="border-2 border-[#333333] bg-[#1A1A1A]">
-          <p className="border-b-2 border-[#333333] px-4 py-2 text-[10px] font-black uppercase tracking-widest text-[#555555]">
+        <div className="border-2 border-black">
+          <p className="border-b-2 border-black px-4 py-2 text-[10px] font-black uppercase tracking-widest text-[#666666]">
             STATUT
           </p>
 
-          <div className="flex items-center justify-between px-4 py-4 border-b border-[#222222]">
+          <div className="flex items-center justify-between px-4 py-4 border-b border-[#E5E5E5]">
             <div>
-              <p className="text-sm font-black uppercase text-white">MODE ACTIF</p>
-              <p className="text-[11px] text-[#555555]">
+              <p className="text-sm font-black uppercase text-black">MODE ACTIF</p>
+              <p className="text-[11px] text-[#888888]">
                 {profile.is_online ? 'Visible dans les matchings' : 'Hors-ligne — invisible'}
               </p>
             </div>
@@ -212,8 +215,8 @@ export default function ProfilePage() {
 
           <div className="flex items-center justify-between px-4 py-4">
             <div>
-              <p className="text-sm font-black uppercase text-white">LOCALISATION FLOUE</p>
-              <p className="text-[11px] text-[#555555]">
+              <p className="text-sm font-black uppercase text-black">LOCALISATION FLOUE</p>
+              <p className="text-[11px] text-[#888888]">
                 {profile.location_sharing ? 'Position floue visible sur la carte' : 'Désactivée'}
               </p>
             </div>
@@ -223,17 +226,17 @@ export default function ProfilePage() {
 
         {/* Moods */}
         <div>
-          <p className="mb-3 text-xs font-black uppercase tracking-widest text-[#999999]">MOODS FAVORIS</p>
+          <p className="mb-3 text-xs font-black uppercase tracking-widest text-[#666666]">MOODS FAVORIS</p>
           <div className="flex flex-wrap gap-2">
             {MOODS.map((m) => (
               <button
                 key={m}
                 onClick={() => toggleMood(m)}
                 disabled={saving}
-                className={`border-2 px-3 py-2 text-xs font-bold uppercase tracking-widest transition-colors disabled:opacity-40 ${
+                className={`border-2 px-3 py-2 text-xs font-black uppercase tracking-widest transition-colors disabled:opacity-40 ${
                   moods.includes(m)
-                    ? 'border-[#CCFF00] bg-[#CCFF00] text-black'
-                    : 'border-[#333333] bg-transparent text-white hover:border-[#CCFF00]'
+                    ? 'border-black bg-[#CCFF00] text-black'
+                    : 'border-black bg-white text-black hover:bg-[#F5F5F5]'
                 }`}
               >
                 {MOOD_LABELS[m]}
@@ -244,17 +247,17 @@ export default function ProfilePage() {
 
         {/* Arrondissements */}
         <div>
-          <p className="mb-3 text-xs font-black uppercase tracking-widest text-[#999999]">QUARTIERS FAVORIS</p>
+          <p className="mb-3 text-xs font-black uppercase tracking-widest text-[#666666]">QUARTIERS FAVORIS</p>
           <div className="flex flex-wrap gap-1.5">
             {Array.from({ length: 20 }, (_, i) => i + 1).map((a) => (
               <button
                 key={a}
                 onClick={() => toggleArr(a)}
                 disabled={saving}
-                className={`border-2 px-2 py-1.5 text-[11px] font-bold uppercase tracking-widest transition-colors disabled:opacity-40 ${
+                className={`border-2 px-2 py-1.5 text-[11px] font-black uppercase tracking-widest transition-colors disabled:opacity-40 ${
                   arrs.includes(a)
-                    ? 'border-[#CCFF00] bg-[#CCFF00] text-black'
-                    : 'border-[#333333] bg-transparent text-[#999999] hover:border-[#CCFF00]'
+                    ? 'border-black bg-[#CCFF00] text-black'
+                    : 'border-black bg-white text-black hover:bg-[#F5F5F5]'
                 }`}
               >
                 {ARRONDISSEMENT_LABELS[a]}
@@ -265,7 +268,7 @@ export default function ProfilePage() {
 
         {/* Availability */}
         <div>
-          <p className="mb-3 text-xs font-black uppercase tracking-widest text-[#999999]">DISPONIBILITÉ HABITUELLE</p>
+          <p className="mb-3 text-xs font-black uppercase tracking-widest text-[#666666]">DISPONIBILITÉ HABITUELLE</p>
           <div className="flex flex-col gap-2">
             {(Object.keys(AVAILABILITY_LABELS) as AvailabilityType[]).map((v) => (
               <button
@@ -274,8 +277,8 @@ export default function ProfilePage() {
                 disabled={saving}
                 className={`border-2 px-4 py-3 text-left text-xs font-black uppercase tracking-widest transition-colors disabled:opacity-40 ${
                   profile.usual_availability === v
-                    ? 'border-[#CCFF00] bg-[#CCFF00] text-black'
-                    : 'border-[#333333] bg-transparent text-white hover:border-[#CCFF00]'
+                    ? 'border-black bg-[#CCFF00] text-black'
+                    : 'border-black bg-white text-black hover:bg-[#F5F5F5]'
                 }`}
               >
                 {AVAILABILITY_LABELS[v]}
@@ -285,15 +288,15 @@ export default function ProfilePage() {
         </div>
 
         {/* Invitation */}
-        <div className="border-2 border-[#333333] bg-[#1A1A1A] p-4">
-          <p className="mb-1 text-xs font-black uppercase tracking-widest text-[#999999]">INVITER UN AMI</p>
-          <p className="mb-4 text-[11px] text-[#555555]">
+        <div className="border-2 border-black p-4">
+          <p className="mb-1 text-xs font-black uppercase tracking-widest text-[#666666]">INVITER UN AMI</p>
+          <p className="mb-4 text-[11px] text-[#888888]">
             Génère un lien unique — valable 7 jours.
           </p>
 
           {inviteUrl ? (
             <div className="flex flex-col gap-2">
-              <p className="break-all border-2 border-[#333333] bg-black px-3 py-2 text-[11px] font-bold text-[#CCFF00]">
+              <p className="break-all border-2 border-black bg-[#F5F5F5] px-3 py-2 text-[11px] font-bold text-black">
                 {inviteUrl}
               </p>
               <button
@@ -307,7 +310,7 @@ export default function ProfilePage() {
             <button
               onClick={generateInvite}
               disabled={inviteLoading}
-              className="w-full border-2 border-[#CCFF00] py-3 text-xs font-black uppercase tracking-widest text-[#CCFF00] transition-colors hover:bg-[#CCFF00] hover:text-black disabled:opacity-40"
+              className="w-full border-2 border-black bg-white py-3 text-xs font-black uppercase tracking-widest text-black transition-colors hover:bg-black hover:text-white disabled:opacity-40"
             >
               {inviteLoading ? '...' : 'GÉNÉRER UN LIEN →'}
             </button>
@@ -317,7 +320,7 @@ export default function ProfilePage() {
         {/* Sign out */}
         <button
           onClick={signOut}
-          className="border-2 border-[#333333] py-4 text-xs font-black uppercase tracking-widest text-[#555555] transition-colors hover:border-red-500 hover:text-red-500"
+          className="border-2 border-black py-4 text-xs font-black uppercase tracking-widest text-black transition-colors hover:bg-red-500 hover:border-red-500 hover:text-white"
         >
           SE DÉCONNECTER
         </button>

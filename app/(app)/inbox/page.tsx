@@ -69,58 +69,54 @@ function EventCard({ ev }: { ev: InboxEvent }) {
 
   return (
     <Link href={`/events/${ev.id}`}>
-      <div className={`border-2 bg-[#1A1A1A] p-4 transition-all hover:shadow-[4px_4px_0_0_#CCFF00] ${
-        past ? 'border-[#222222] opacity-50' : 'border-[#333333]'
+      <div className={`border-2 bg-white p-4 transition-all hover:shadow-[4px_4px_0_0_#000] ${
+        past ? 'border-black opacity-40' : 'border-black'
       }`}>
-        {/* Top row */}
         <div className="mb-3 flex items-start justify-between gap-2">
           <div className="flex flex-wrap gap-1.5">
-            <span className="border border-[#CCFF00] px-1.5 py-0.5 text-[10px] font-black uppercase tracking-widest text-[#CCFF00]">
+            <span className="border-2 border-black bg-[#CCFF00] px-1.5 py-0.5 text-[10px] font-black uppercase tracking-widest text-black">
               {MOOD_LABELS[ev.mood]}
             </span>
-            <span className="border border-[#333333] px-1.5 py-0.5 text-[10px] font-bold uppercase tracking-widest text-[#999999]">
+            <span className="border-2 border-black px-1.5 py-0.5 text-[10px] font-black uppercase tracking-widest text-black">
               {ev.type === 'planned' ? 'PLANIFIÉ' : 'MAINTENANT'}
             </span>
             {ev.status === 'cancelled' && (
-              <span className="border border-red-500 px-1.5 py-0.5 text-[10px] font-black uppercase tracking-widest text-red-500">
+              <span className="border-2 border-red-500 px-1.5 py-0.5 text-[10px] font-black uppercase tracking-widest text-red-500">
                 ANNULÉ
               </span>
             )}
           </div>
           {ev.participationStatus === 'invited' && !past && (
-            <span className="shrink-0 border border-[#CCFF00] bg-[#CCFF00]/10 px-2 py-0.5 text-[10px] font-black uppercase tracking-widest text-[#CCFF00]">
+            <span className="shrink-0 border-2 border-black bg-black px-2 py-0.5 text-[10px] font-black uppercase tracking-widest text-white">
               INVITÉ
             </span>
           )}
         </div>
 
-        {/* Title */}
-        <h3 className="mb-2 text-base font-black uppercase leading-tight text-white">
+        <h3 className="mb-2 text-base font-black uppercase leading-tight text-black">
           {ev.title ?? MOOD_LABELS[ev.mood]}
         </h3>
 
-        {/* Date / time remaining */}
         {ev.type === 'planned' && ev.date && (
-          <p className="mb-1 text-xs font-bold text-[#999999]">
+          <p className="mb-1 text-xs font-bold text-[#666666]">
             {formatDate(ev.date)}
             {ev.startTime && (
-              <span className="text-white"> · {ev.startTime.slice(0, 5)}</span>
+              <span className="text-black"> · {ev.startTime.slice(0, 5)}</span>
             )}
           </p>
         )}
         {ev.type === 'spontaneous' && !past && (
-          <p className="mb-1 text-xs font-black uppercase tracking-widest text-[#CCFF00]">
-            {timeRemaining(ev.createdAt)}
+          <p className="mb-1 text-xs font-black uppercase tracking-widest text-black">
+            ⚡ {timeRemaining(ev.createdAt)}
           </p>
         )}
 
-        {/* Location + creator */}
         <div className="flex items-center justify-between gap-2">
-          <p className="text-xs text-[#555555]">
+          <p className="text-xs text-[#888888]">
             {ev.arrondissement ? `Paris ${ARRONDISSEMENT_LABELS[ev.arrondissement]}` : ''}
             {ev.locationName ? ` · ${ev.locationName}` : ''}
           </p>
-          <p className="shrink-0 text-xs text-[#555555]">
+          <p className="shrink-0 text-xs text-[#888888]">
             par {ev.creatorFirstName} {ev.creatorLastNameInit}
           </p>
         </div>
@@ -177,37 +173,33 @@ export default function InboxPage() {
   const tabItems = tab === 'pending' ? pending : tab === 'confirmed' ? confirmed : past
 
   const TABS: { key: Tab; label: string; count: number }[] = [
-    { key: 'pending', label: 'EN ATTENTE', count: pending.length },
-    { key: 'confirmed', label: 'CONFIRMÉS', count: confirmed.length },
-    { key: 'past', label: 'PASSÉS', count: past.length },
+    { key: 'pending', label: 'PENDING', count: pending.length },
+    { key: 'confirmed', label: 'CONFIRMED', count: confirmed.length },
+    { key: 'past', label: 'PAST', count: past.length },
   ]
 
   return (
-    <div className="h-full overflow-y-auto bg-black">
+    <div className="h-full overflow-y-auto bg-white">
       {/* Header */}
-      <div className="sticky top-0 z-10 border-b-2 border-[#333333] bg-black px-4 pt-6">
-        <h1 className="mb-5 text-[40px] font-black uppercase leading-none tracking-tight text-white">
+      <div className="sticky top-0 z-10 border-b-2 border-black bg-white px-4 pt-6">
+        <h1 className="mb-5 text-[40px] font-black uppercase leading-none tracking-tight text-black">
           INBOX
         </h1>
 
         {/* Tabs */}
-        <div className="flex">
+        <div className="flex gap-2 pb-4">
           {TABS.map(({ key, label, count }) => (
             <button
               key={key}
               onClick={() => setTab(key)}
-              className={`flex-1 border-b-2 pb-3 text-[10px] font-black uppercase tracking-widest transition-colors ${
+              className={`border-2 border-black px-3 py-1.5 text-[10px] font-black uppercase tracking-widest transition-colors ${
                 tab === key
-                  ? 'border-[#CCFF00] text-[#CCFF00]'
-                  : 'border-transparent text-[#555555] hover:text-[#999999]'
+                  ? 'bg-black text-white'
+                  : 'bg-white text-black hover:bg-[#F5F5F5]'
               }`}
             >
               {label}
-              {count > 0 && (
-                <span className={`ml-1.5 ${tab === key ? 'text-[#CCFF00]' : 'text-[#333333]'}`}>
-                  ({count})
-                </span>
-              )}
+              {count > 0 && <span className="ml-1">({count})</span>}
             </button>
           ))}
         </div>
@@ -216,15 +208,15 @@ export default function InboxPage() {
       {/* Content */}
       <div className="px-4 pb-28 pt-4">
         {loading ? (
-          <p className="pt-12 text-center text-xs font-bold uppercase tracking-widest text-[#555555]">
+          <p className="pt-12 text-center text-xs font-black uppercase tracking-widest text-[#AAAAAA]">
             CHARGEMENT...
           </p>
         ) : tabItems.length === 0 ? (
           <div className="pt-16 text-center">
-            <p className="text-4xl font-black text-[#222222]">
+            <p className="text-4xl font-black text-[#E5E5E5]">
               {tab === 'pending' ? '0' : tab === 'confirmed' ? '✓' : '—'}
             </p>
-            <p className="mt-3 text-xs font-bold uppercase tracking-widest text-[#444444]">
+            <p className="mt-3 text-xs font-black uppercase tracking-widest text-[#AAAAAA]">
               {tab === 'pending'
                 ? 'Aucune invitation en attente'
                 : tab === 'confirmed'
@@ -234,7 +226,7 @@ export default function InboxPage() {
             {tab !== 'past' && (
               <Link
                 href="/"
-                className="mt-6 inline-block border-2 border-[#CCFF00] px-4 py-2 text-xs font-black uppercase tracking-widest text-[#CCFF00]"
+                className="mt-6 inline-block border-2 border-black px-4 py-2 text-xs font-black uppercase tracking-widest text-black hover:bg-black hover:text-white transition-colors"
               >
                 VOIR LA CARTE →
               </Link>

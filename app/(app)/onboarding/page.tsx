@@ -30,7 +30,7 @@ const DEFAULT_CIRCLES: { name: string; type: 'proches' | 'collegues' | 'connaiss
 
 export default function OnboardingPage() {
   return (
-    <Suspense fallback={<div className="flex h-full items-center justify-center bg-black"><p className="text-xs font-bold uppercase tracking-widest text-[#555555]">CHARGEMENT...</p></div>}>
+    <Suspense fallback={<div className="flex h-full items-center justify-center bg-white"><p className="text-xs font-black uppercase tracking-widest text-[#AAAAAA]">CHARGEMENT...</p></div>}>
       <OnboardingContent />
     </Suspense>
   )
@@ -147,13 +147,13 @@ function OnboardingContent() {
       })
     }
 
-    router.push('/')
+    window.location.href = '/'
   }
 
   return (
-    <div className="h-full overflow-y-auto bg-black px-6 py-16">
-      <div className="mx-auto max-w-[375px]">
-        <h1 className="mb-12 text-[80px] font-black uppercase leading-none tracking-tight text-white">
+    <div className="h-full overflow-y-auto bg-white px-6 py-16">
+      <div className="mx-auto max-w-93.75">
+        <h1 className="mb-12 text-[80px] font-black uppercase leading-none tracking-tight text-black">
           WELCO
           <br />
           ME.
@@ -162,13 +162,13 @@ function OnboardingContent() {
         <form onSubmit={handleSubmit} className="flex flex-col gap-8">
           {/* AVATAR */}
           <div>
-            <label className="mb-2 block text-xs font-bold uppercase tracking-widest text-[#999999]">
+            <label className="mb-2 block text-xs font-black uppercase tracking-widest text-[#666666]">
               AVATAR
             </label>
             <button
               type="button"
               onClick={() => fileInputRef.current?.click()}
-              className="flex h-24 w-24 items-center justify-center border-2 border-[#333333] bg-[#1A1A1A] text-[#999999] transition-colors hover:border-[#CCFF00] overflow-hidden"
+              className="flex h-24 w-24 items-center justify-center border-2 border-black bg-[#F5F5F5] text-black transition-colors hover:border-[#CCFF00] overflow-hidden"
             >
               {avatarPreview ? (
                 <img src={avatarPreview} alt="avatar" className="h-full w-full object-cover" />
@@ -187,7 +187,7 @@ function OnboardingContent() {
 
           {/* PRÉNOM */}
           <div>
-            <label className="mb-2 block text-xs font-bold uppercase tracking-widest text-[#999999]">
+            <label className="mb-2 block text-xs font-black uppercase tracking-widest text-[#666666]">
               PRÉNOM
             </label>
             <input
@@ -197,13 +197,13 @@ function OnboardingContent() {
               placeholder="Ton prénom"
               required
               maxLength={50}
-              className="w-full border-2 border-[#333333] bg-[#1A1A1A] px-4 py-4 font-bold text-white outline-none placeholder:text-[#555555] focus:border-[#CCFF00] transition-colors"
+              className="w-full border-2 border-black bg-white px-4 py-4 font-bold text-black outline-none placeholder:text-[#AAAAAA] focus:border-[#CCFF00] transition-colors"
             />
           </div>
 
           {/* INITIALE */}
           <div>
-            <label className="mb-2 block text-xs font-bold uppercase tracking-widest text-[#999999]">
+            <label className="mb-2 block text-xs font-black uppercase tracking-widest text-[#666666]">
               INITIALE DU NOM
             </label>
             <input
@@ -216,18 +216,18 @@ function OnboardingContent() {
               placeholder="D"
               required
               maxLength={1}
-              className="w-20 border-2 border-[#333333] bg-[#1A1A1A] px-4 py-4 font-bold text-white outline-none placeholder:text-[#555555] focus:border-[#CCFF00] transition-colors"
+              className="w-20 border-2 border-black bg-white px-4 py-4 font-bold text-black outline-none placeholder:text-[#AAAAAA] focus:border-[#CCFF00] transition-colors"
             />
             {lastNameInit && (
-              <span className="ml-2 text-sm text-[#999999]">→ {lastNameInit.toUpperCase()}.</span>
+              <span className="ml-2 text-sm text-[#666666]">→ {lastNameInit.toUpperCase()}.</span>
             )}
           </div>
 
           {/* BIO */}
           <div>
-            <label className="mb-2 block text-xs font-bold uppercase tracking-widest text-[#999999]">
+            <label className="mb-2 block text-xs font-black uppercase tracking-widest text-[#666666]">
               BIO{' '}
-              <span className="font-normal normal-case tracking-normal">
+              <span className="font-normal normal-case tracking-normal text-[#AAAAAA]">
                 (optionnel)
               </span>
             </label>
@@ -237,14 +237,14 @@ function OnboardingContent() {
               placeholder="TELL THE WORLD..."
               maxLength={100}
               rows={3}
-              className="w-full resize-none border-2 border-[#333333] bg-[#1A1A1A] px-4 py-4 font-bold text-white outline-none placeholder:text-[#555555] focus:border-[#CCFF00] transition-colors"
+              className="w-full resize-none border-2 border-black bg-white px-4 py-4 font-bold text-black outline-none placeholder:text-[#AAAAAA] focus:border-[#CCFF00] transition-colors"
             />
-            <p className="mt-1 text-right text-xs text-[#555555]">{bio.length}/100</p>
+            <p className="mt-1 text-right text-xs text-[#AAAAAA]">{bio.length}/100</p>
           </div>
 
           {/* VIBES */}
           <div>
-            <label className="mb-3 block text-xs font-bold uppercase tracking-widest text-[#999999]">
+            <label className="mb-3 block text-xs font-black uppercase tracking-widest text-[#666666]">
               VIBES (SÉLECTIONNE TES ENVIES)
             </label>
             <div className="flex flex-wrap gap-2">
@@ -255,10 +255,10 @@ function OnboardingContent() {
                     key={mood.value}
                     type="button"
                     onClick={() => toggleMood(mood.value)}
-                    className={`border-2 px-4 py-2.5 text-xs font-bold uppercase tracking-widest transition-colors ${
+                    className={`border-2 px-4 py-2.5 text-xs font-black uppercase tracking-widest transition-colors ${
                       selected
-                        ? 'border-[#CCFF00] bg-[#CCFF00] text-black'
-                        : 'border-[#333333] bg-transparent text-white hover:border-[#CCFF00]'
+                        ? 'border-black bg-[#CCFF00] text-black'
+                        : 'border-black bg-white text-black hover:bg-[#F5F5F5]'
                     }`}
                   >
                     {mood.label}
@@ -270,7 +270,7 @@ function OnboardingContent() {
 
           {/* ARRONDISSEMENTS */}
           <div>
-            <label className="mb-3 block text-xs font-bold uppercase tracking-widest text-[#999999]">
+            <label className="mb-3 block text-xs font-black uppercase tracking-widest text-[#666666]">
               ARRONDISSEMENTS PRÉFÉRÉS
             </label>
             <div className="flex flex-wrap gap-2">
@@ -281,10 +281,10 @@ function OnboardingContent() {
                     key={arr}
                     type="button"
                     onClick={() => toggleArrondissement(arr)}
-                    className={`h-10 w-10 border-2 text-xs font-bold transition-colors ${
+                    className={`h-10 w-10 border-2 text-xs font-black transition-colors ${
                       selected
-                        ? 'border-[#CCFF00] bg-[#CCFF00] text-black'
-                        : 'border-[#333333] bg-transparent text-white hover:border-[#CCFF00]'
+                        ? 'border-black bg-[#CCFF00] text-black'
+                        : 'border-black bg-white text-black hover:bg-[#F5F5F5]'
                     }`}
                   >
                     {arr}
@@ -296,7 +296,7 @@ function OnboardingContent() {
 
           {/* DISPONIBILITÉ */}
           <div>
-            <label className="mb-3 block text-xs font-bold uppercase tracking-widest text-[#999999]">
+            <label className="mb-3 block text-xs font-black uppercase tracking-widest text-[#666666]">
               DISPONIBILITÉ HABITUELLE
             </label>
             <div className="flex flex-col gap-2">
@@ -307,10 +307,10 @@ function OnboardingContent() {
                     key={avail.value}
                     type="button"
                     onClick={() => setAvailability(avail.value)}
-                    className={`border-2 px-4 py-3 text-xs font-bold uppercase tracking-widest transition-colors ${
+                    className={`border-2 px-4 py-3 text-xs font-black uppercase tracking-widest transition-colors ${
                       selected
-                        ? 'border-[#CCFF00] bg-[#CCFF00] text-black'
-                        : 'border-[#333333] bg-transparent text-white hover:border-[#CCFF00]'
+                        ? 'border-black bg-[#CCFF00] text-black'
+                        : 'border-black bg-white text-black hover:bg-[#F5F5F5]'
                     }`}
                   >
                     {avail.label}
@@ -321,13 +321,13 @@ function OnboardingContent() {
           </div>
 
           {error && (
-            <p className="text-xs font-bold uppercase tracking-wider text-red-500">{error}</p>
+            <p className="text-xs font-black uppercase tracking-wider text-red-500">{error}</p>
           )}
 
           <button
             type="submit"
             disabled={loading || !firstName || !lastNameInit || !availability}
-            className="mt-4 border-2 border-[#CCFF00] bg-[#CCFF00] px-6 py-5 text-base font-black uppercase tracking-widest text-black transition-colors hover:bg-black hover:text-[#CCFF00] disabled:opacity-40 disabled:cursor-not-allowed"
+            className="mt-4 border-2 border-black bg-[#CCFF00] px-6 py-5 text-base font-black uppercase tracking-widest text-black shadow-[4px_4px_0_0_#000] transition-all hover:shadow-none disabled:opacity-40 disabled:cursor-not-allowed"
           >
             {loading ? 'CRÉATION...' : 'ENTRER →'}
           </button>

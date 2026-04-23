@@ -207,8 +207,8 @@ export default function MapView() {
       {/* Offline banner */}
       {isOffline && (
         <div className="absolute left-4 right-4 top-4 z-20 pointer-events-none">
-          <div className="flex items-center justify-between border-2 border-[#333333] bg-black/90 px-3 py-2">
-            <p className="text-[10px] font-black uppercase tracking-widest text-[#555555]">
+          <div className="flex items-center justify-between border-2 border-black bg-white/95 px-3 py-2">
+            <p className="text-[10px] font-black uppercase tracking-widest text-[#888888]">
               HORS-LIGNE — invisible dans les matchings
             </p>
             <Link
@@ -231,8 +231,8 @@ export default function MapView() {
               onClick={() => setTimeFilter(t)}
               className={`border-2 px-3 py-1.5 text-[10px] font-black uppercase tracking-widest transition-colors ${
                 timeFilter === t
-                  ? 'border-[#CCFF00] bg-[#CCFF00] text-black'
-                  : 'border-[#333333] bg-black/80 text-[#999999] hover:border-[#CCFF00]'
+                  ? 'border-black bg-[#CCFF00] text-black'
+                  : 'border-black bg-white/90 text-black hover:bg-[#F5F5F5]'
               }`}
             >
               {t === 'all' ? 'TOUS' : t === 'matin' ? 'MATIN' : t === 'aprem' ? 'APRÈS-MIDI' : 'SOIR'}
@@ -248,8 +248,8 @@ export default function MapView() {
               onClick={() => setMoodFilter(moodFilter === m ? null : m)}
               className={`border-2 px-2.5 py-1 text-[10px] font-bold uppercase tracking-widest transition-colors ${
                 moodFilter === m
-                  ? 'border-[#CCFF00] bg-[#CCFF00] text-black'
-                  : 'border-[#333333] bg-black/80 text-white hover:border-[#CCFF00]'
+                  ? 'border-black bg-[#CCFF00] text-black'
+                  : 'border-black bg-white/90 text-black hover:bg-[#F5F5F5]'
               }`}
             >
               {MOOD_LABELS[m]}
@@ -261,41 +261,41 @@ export default function MapView() {
       {/* Event preview card */}
       {selected && (
         <div className="absolute bottom-4 left-4 right-4">
-          <div className="border-2 border-[#333333] bg-[#1A1A1A] shadow-[4px_4px_0_0_#000] p-4">
+          <div className="border-2 border-black bg-white shadow-[4px_4px_0_0_#000] p-4">
             <div className="mb-2 flex items-start justify-between gap-2">
               <div className="flex gap-2">
-                <span className="border border-[#CCFF00] px-2 py-0.5 text-[10px] font-black uppercase tracking-widest text-[#CCFF00]">
+                <span className="border-2 border-black bg-[#CCFF00] px-2 py-0.5 text-[10px] font-black uppercase tracking-widest text-black">
                   {MOOD_LABELS[selected.mood]}
                 </span>
-                <span className="border border-[#333333] px-2 py-0.5 text-[10px] font-bold uppercase tracking-widest text-[#999999]">
+                <span className="border-2 border-black px-2 py-0.5 text-[10px] font-black uppercase tracking-widest text-black">
                   {selected.type === 'planned' ? 'PLANIFIÉ' : 'MAINTENANT'}
                 </span>
               </div>
               <button
                 onClick={() => setSelected(null)}
-                className="text-xs text-[#555555] hover:text-white"
+                className="text-xs text-[#888888] hover:text-black"
               >
                 ✕
               </button>
             </div>
 
-            <h3 className="mb-1 text-lg font-black uppercase leading-tight text-white">
+            <h3 className="mb-1 text-lg font-black uppercase leading-tight text-black">
               {selected.title ?? MOOD_LABELS[selected.mood]}
             </h3>
 
             {selected.date && (
-              <p className="mb-1 text-xs font-bold text-[#999999]">
+              <p className="mb-1 text-xs font-bold text-[#666666]">
                 {new Date(selected.date + 'T00:00:00').toLocaleDateString('fr-FR', {
                   weekday: 'short', day: 'numeric', month: 'short',
                 }).toUpperCase()}
                 {selected.start_time && (
-                  <span className="text-white"> · {selected.start_time.slice(0, 5)}</span>
+                  <span className="text-black"> · {selected.start_time.slice(0, 5)}</span>
                 )}
               </p>
             )}
 
             {selected.location_name && (
-              <p className="mb-3 text-xs text-[#999999]">
+              <p className="mb-3 text-xs text-[#888888]">
                 📍 {selected.location_name}
               </p>
             )}

@@ -38,21 +38,21 @@ function SlotCard({ slot, onDelete }: { slot: Slot; onDelete: (id: string) => vo
   }
 
   return (
-    <div className="flex items-start justify-between border-2 border-[#333333] bg-[#1A1A1A] p-4">
+    <div className="flex items-start justify-between border-2 border-black bg-white p-4">
       <div className="flex flex-col gap-2">
-        <p className="text-lg font-black uppercase tracking-wide text-white">
+        <p className="text-lg font-black uppercase tracking-wide text-black">
           {formatTime(slot.start_time)} – {formatTime(slot.end_time)}
         </p>
         {slot.is_recurring && slot.recurrence_days && slot.recurrence_days.length > 0 && (
-          <p className="text-xs font-bold uppercase tracking-widest text-[#CCFF00]">
-            {slot.recurrence_days.map((d) => DAY_LABELS[d]).join(' · ')}
+          <p className="text-xs font-black uppercase tracking-widest text-black">
+            ↻ {slot.recurrence_days.map((d) => DAY_LABELS[d]).join(' · ')}
           </p>
         )}
         <div className="flex flex-wrap gap-1">
           {slot.moods.map((mood) => (
             <span
               key={mood}
-              className="border border-[#CCFF00] px-2 py-0.5 text-[10px] font-bold uppercase tracking-widest text-[#CCFF00]"
+              className="border-2 border-black bg-[#CCFF00] px-2 py-0.5 text-[10px] font-black uppercase tracking-widest text-black"
             >
               {MOODS.find((m) => m.value === mood)?.label ?? mood}
             </span>
@@ -62,7 +62,7 @@ function SlotCard({ slot, onDelete }: { slot: Slot; onDelete: (id: string) => vo
       <button
         onClick={handleDelete}
         disabled={deleting}
-        className="ml-4 shrink-0 border-2 border-[#333333] p-2 text-[#999999] transition-colors hover:border-red-500 hover:text-red-500 disabled:opacity-40"
+        className="ml-4 shrink-0 border-2 border-black p-2 text-black transition-colors hover:border-red-500 hover:bg-red-500 hover:text-white disabled:opacity-40"
         aria-label="Supprimer"
       >
         ✕
@@ -132,8 +132,8 @@ function AddSlotForm({ onCreated }: { onCreated: () => void }) {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="flex flex-col gap-5 border-2 border-[#CCFF00] p-5">
-      <p className="text-xs font-bold uppercase tracking-widest text-[#CCFF00]">
+    <form onSubmit={handleSubmit} className="flex flex-col gap-5 border-2 border-black p-5">
+      <p className="text-xs font-black uppercase tracking-widest text-black">
         NOUVEAU CRÉNEAU
       </p>
 
@@ -142,27 +142,27 @@ function AddSlotForm({ onCreated }: { onCreated: () => void }) {
         <button
           type="button"
           onClick={() => setIsRecurring((v) => !v)}
-          className={`h-6 w-11 rounded-full border-2 transition-colors ${
-            isRecurring ? 'border-[#CCFF00] bg-[#CCFF00]' : 'border-[#333333] bg-transparent'
+          className={`relative h-7 w-12 border-2 transition-colors ${
+            isRecurring ? 'border-black bg-[#CCFF00]' : 'border-black bg-white'
           }`}
           role="switch"
           aria-checked={isRecurring}
         >
           <span
-            className={`block h-3 w-3 rounded-full bg-black transition-transform ${
-              isRecurring ? 'translate-x-5 ml-0.5' : 'translate-x-0.5'
+            className={`absolute top-0.5 block h-4 w-4 border-2 transition-transform ${
+              isRecurring ? 'translate-x-5.5 border-black bg-black' : 'translate-x-0.5 border-[#CCCCCC] bg-[#CCCCCC]'
             }`}
           />
         </button>
-        <span className="text-xs font-bold uppercase tracking-widest text-white">
+        <span className="text-xs font-black uppercase tracking-widest text-black">
           RÉCURRENT
         </span>
       </div>
 
-      {/* Date (only if not recurring) */}
+      {/* Date */}
       {!isRecurring && (
         <div>
-          <label className="mb-2 block text-xs font-bold uppercase tracking-widest text-[#999999]">
+          <label className="mb-2 block text-xs font-black uppercase tracking-widest text-[#666666]">
             DATE
           </label>
           <input
@@ -171,7 +171,7 @@ function AddSlotForm({ onCreated }: { onCreated: () => void }) {
             min={today}
             onChange={(e) => setDate(e.target.value)}
             required={!isRecurring}
-            className="w-full border-2 border-[#333333] bg-[#1A1A1A] px-4 py-3 font-bold text-white outline-none focus:border-[#CCFF00] transition-colors"
+            className="w-full border-2 border-black bg-white px-4 py-3 font-bold text-black outline-none focus:border-[#CCFF00] transition-colors"
           />
         </div>
       )}
@@ -179,7 +179,7 @@ function AddSlotForm({ onCreated }: { onCreated: () => void }) {
       {/* Recurrence days */}
       {isRecurring && (
         <div>
-          <label className="mb-2 block text-xs font-bold uppercase tracking-widest text-[#999999]">
+          <label className="mb-2 block text-xs font-black uppercase tracking-widest text-[#666666]">
             JOURS
           </label>
           <div className="flex gap-2">
@@ -190,10 +190,10 @@ function AddSlotForm({ onCreated }: { onCreated: () => void }) {
                   key={day}
                   type="button"
                   onClick={() => toggleDay(day)}
-                  className={`flex h-10 w-10 items-center justify-center border-2 text-xs font-bold transition-colors ${
+                  className={`flex h-10 w-10 items-center justify-center border-2 text-xs font-black transition-colors ${
                     selected
-                      ? 'border-[#CCFF00] bg-[#CCFF00] text-black'
-                      : 'border-[#333333] text-white hover:border-[#CCFF00]'
+                      ? 'border-black bg-[#CCFF00] text-black'
+                      : 'border-black bg-white text-black hover:bg-[#F5F5F5]'
                   }`}
                 >
                   {DAY_LABELS[day][0]}
@@ -207,7 +207,7 @@ function AddSlotForm({ onCreated }: { onCreated: () => void }) {
       {/* Time range */}
       <div className="grid grid-cols-2 gap-3">
         <div>
-          <label className="mb-2 block text-xs font-bold uppercase tracking-widest text-[#999999]">
+          <label className="mb-2 block text-xs font-black uppercase tracking-widest text-[#666666]">
             DÉBUT
           </label>
           <input
@@ -215,11 +215,11 @@ function AddSlotForm({ onCreated }: { onCreated: () => void }) {
             value={startTime}
             onChange={(e) => setStartTime(e.target.value)}
             required
-            className="w-full border-2 border-[#333333] bg-[#1A1A1A] px-4 py-3 font-bold text-white outline-none focus:border-[#CCFF00] transition-colors"
+            className="w-full border-2 border-black bg-white px-4 py-3 font-bold text-black outline-none focus:border-[#CCFF00] transition-colors"
           />
         </div>
         <div>
-          <label className="mb-2 block text-xs font-bold uppercase tracking-widest text-[#999999]">
+          <label className="mb-2 block text-xs font-black uppercase tracking-widest text-[#666666]">
             FIN
           </label>
           <input
@@ -227,14 +227,14 @@ function AddSlotForm({ onCreated }: { onCreated: () => void }) {
             value={endTime}
             onChange={(e) => setEndTime(e.target.value)}
             required
-            className="w-full border-2 border-[#333333] bg-[#1A1A1A] px-4 py-3 font-bold text-white outline-none focus:border-[#CCFF00] transition-colors"
+            className="w-full border-2 border-black bg-white px-4 py-3 font-bold text-black outline-none focus:border-[#CCFF00] transition-colors"
           />
         </div>
       </div>
 
       {/* Moods */}
       <div>
-        <label className="mb-2 block text-xs font-bold uppercase tracking-widest text-[#999999]">
+        <label className="mb-2 block text-xs font-black uppercase tracking-widest text-[#666666]">
           MOODS
         </label>
         <div className="flex flex-wrap gap-2">
@@ -245,10 +245,10 @@ function AddSlotForm({ onCreated }: { onCreated: () => void }) {
                 key={mood.value}
                 type="button"
                 onClick={() => toggleMood(mood.value)}
-                className={`border-2 px-3 py-2 text-xs font-bold uppercase tracking-widest transition-colors ${
+                className={`border-2 px-3 py-2 text-xs font-black uppercase tracking-widest transition-colors ${
                   selected
-                    ? 'border-[#CCFF00] bg-[#CCFF00] text-black'
-                    : 'border-[#333333] text-white hover:border-[#CCFF00]'
+                    ? 'border-black bg-[#CCFF00] text-black'
+                    : 'border-black bg-white text-black hover:bg-[#F5F5F5]'
                 }`}
               >
                 {mood.label}
@@ -259,13 +259,13 @@ function AddSlotForm({ onCreated }: { onCreated: () => void }) {
       </div>
 
       {error && (
-        <p className="text-xs font-bold uppercase tracking-wider text-red-500">{error}</p>
+        <p className="text-xs font-black uppercase tracking-wider text-red-500">{error}</p>
       )}
 
       <button
         type="submit"
         disabled={loading}
-        className="border-2 border-[#CCFF00] bg-[#CCFF00] px-4 py-4 font-black uppercase tracking-widest text-black transition-colors hover:bg-black hover:text-[#CCFF00] disabled:opacity-40"
+        className="border-2 border-black bg-[#CCFF00] px-4 py-4 font-black uppercase tracking-widest text-black shadow-[4px_4px_0_0_#000] transition-all hover:shadow-none disabled:opacity-40"
       >
         {loading ? 'CRÉATION...' : 'AJOUTER →'}
       </button>
@@ -296,24 +296,24 @@ export default function SlotsPage() {
   }, {})
 
   return (
-    <div className="h-full overflow-y-auto bg-black px-4 pb-32 pt-8">
-      <div className="mx-auto max-w-[375px]">
+    <div className="h-full overflow-y-auto bg-white px-4 pb-32 pt-8">
+      <div className="mx-auto max-w-93.75">
         <div className="mb-8 flex items-center justify-between">
           <button
             onClick={() => router.back()}
-            className="text-xs font-bold uppercase tracking-widest text-[#999999] hover:text-white"
+            className="text-xs font-black uppercase tracking-widest text-[#888888] hover:text-black"
           >
             ← RETOUR
           </button>
-          <h1 className="text-2xl font-black uppercase tracking-tight text-white">
+          <h1 className="text-2xl font-black uppercase tracking-tight text-black">
             CRÉNEAUX
           </h1>
           <button
             onClick={() => setShowForm((v) => !v)}
             className={`border-2 px-3 py-2 text-xs font-black uppercase tracking-widest transition-colors ${
               showForm
-                ? 'border-[#333333] bg-transparent text-[#999999]'
-                : 'border-[#CCFF00] bg-[#CCFF00] text-black'
+                ? 'border-black bg-white text-black hover:bg-[#F5F5F5]'
+                : 'border-black bg-[#CCFF00] text-black'
             }`}
           >
             {showForm ? 'ANNULER' : '+ AJOUTER'}
@@ -327,24 +327,23 @@ export default function SlotsPage() {
         )}
 
         {loading && (
-          <p className="text-xs font-bold uppercase tracking-widest text-[#999999]">
+          <p className="text-xs font-black uppercase tracking-widest text-[#AAAAAA]">
             CHARGEMENT...
           </p>
         )}
 
         {!loading && slots.length === 0 && !showForm && (
           <div className="mt-16 text-center">
-            <p className="text-4xl font-black uppercase text-[#333333]">VIDE.</p>
-            <p className="mt-2 text-xs font-bold uppercase tracking-widest text-[#555555]">
+            <p className="text-4xl font-black uppercase text-[#E5E5E5]">VIDE.</p>
+            <p className="mt-2 text-xs font-black uppercase tracking-widest text-[#AAAAAA]">
               Ajoute tes créneaux libres pour trouver des plans.
             </p>
           </div>
         )}
 
-        {/* Recurring slots */}
         {recurring.length > 0 && (
           <div className="mb-8">
-            <p className="mb-3 text-xs font-bold uppercase tracking-widest text-[#999999]">
+            <p className="mb-3 text-xs font-black uppercase tracking-widest text-[#888888]">
               RÉCURRENTS
             </p>
             <div className="flex flex-col gap-3">
@@ -355,12 +354,11 @@ export default function SlotsPage() {
           </div>
         )}
 
-        {/* One-off slots grouped by date */}
         {Object.keys(grouped)
           .sort()
           .map((date) => (
             <div key={date} className="mb-8">
-              <p className="mb-3 text-xs font-bold uppercase tracking-widest text-[#999999]">
+              <p className="mb-3 text-xs font-black uppercase tracking-widest text-[#888888]">
                 {formatDate(date)}
               </p>
               <div className="flex flex-col gap-3">

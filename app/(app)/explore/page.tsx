@@ -42,11 +42,11 @@ function AvatarBubble({ name, url }: { name: string; url: string | null }) {
   if (url) {
     return (
       <img src={url} alt={name}
-        className="h-10 w-10 rounded-full border-2 border-[#333333] object-cover" />
+        className="h-10 w-10 rounded-full border-2 border-black object-cover" />
     )
   }
   return (
-    <div className="flex h-10 w-10 items-center justify-center rounded-full border-2 border-[#CCFF00] bg-[#1A1A1A] text-sm font-black text-white">
+    <div className="flex h-10 w-10 items-center justify-center rounded-full border-2 border-black bg-[#F5F5F5] text-sm font-black text-black">
       {name.charAt(0)}
     </div>
   )
@@ -69,43 +69,39 @@ function MatchCard({
   const confirmed = match.response_a === 'accepted' && match.response_b === 'accepted'
 
   return (
-    <div className={`border-2 bg-[#1A1A1A] p-4 ${
-      confirmed ? 'border-[#CCFF00] shadow-[4px_4px_0_0_#CCFF00]' : 'border-[#333333]'
+    <div className={`border-2 bg-white p-4 ${
+      confirmed ? 'border-black shadow-[4px_4px_0_0_#CCFF00]' : 'border-black'
     }`}>
       {confirmed && (
-        <p className="mb-3 text-[10px] font-black uppercase tracking-widest text-[#CCFF00]">
+        <p className="mb-3 text-[10px] font-black uppercase tracking-widest text-black">
           ✓ MATCH CONFIRMÉ
         </p>
       )}
 
-      {/* Header */}
       <div className="mb-3 flex items-center gap-3">
         <AvatarBubble name={confirmed ? otherName : '?'} url={confirmed ? (other?.avatar_url ?? null) : null} />
         <div>
-          <p className="text-sm font-black uppercase text-white">
+          <p className="text-sm font-black uppercase text-black">
             {confirmed ? otherName : '— · —'}
           </p>
-          <p className="text-xs text-[#555555]">
+          <p className="text-xs text-[#888888]">
             {confirmed ? 'Disponible au même moment' : 'Quelqu\'un partage ton créneau'}
           </p>
         </div>
       </div>
 
-      {/* Time */}
-      <p className="mb-2 text-xs font-bold uppercase tracking-widest text-white">
+      <p className="mb-2 text-xs font-black uppercase tracking-widest text-black">
         {formatOverlap(match.overlap_start, match.overlap_end)}
       </p>
 
-      {/* Moods */}
       <div className="mb-4 flex flex-wrap gap-1.5">
         {match.shared_moods.map((m) => (
-          <span key={m} className="border border-[#CCFF00] px-2 py-0.5 text-[10px] font-black uppercase tracking-widest text-[#CCFF00]">
+          <span key={m} className="border-2 border-black bg-[#CCFF00] px-2 py-0.5 text-[10px] font-black uppercase tracking-widest text-black">
             {MOOD_LABELS[m]}
           </span>
         ))}
       </div>
 
-      {/* Actions */}
       {!confirmed && myResponse === null && (
         <div className="flex gap-2">
           <button
@@ -116,7 +112,7 @@ function MatchCard({
           </button>
           <button
             onClick={() => onRespond(match.id, 'ignored')}
-            className="border-2 border-[#333333] px-4 py-3 text-xs font-black uppercase tracking-widest text-[#555555] transition-colors hover:border-red-500 hover:text-red-500"
+            className="border-2 border-black px-4 py-3 text-xs font-black uppercase tracking-widest text-black transition-colors hover:bg-red-500 hover:border-red-500 hover:text-white"
           >
             PASS
           </button>
@@ -124,7 +120,7 @@ function MatchCard({
       )}
 
       {!confirmed && myResponse === 'accepted' && theirResponse === null && (
-        <p className="text-xs font-bold uppercase tracking-widest text-[#555555]">
+        <p className="text-xs font-black uppercase tracking-widest text-[#888888]">
           EN ATTENTE DE L'AUTRE...
         </p>
       )}
@@ -132,7 +128,7 @@ function MatchCard({
       {confirmed && (
         <Link
           href="/create"
-          className="block w-full border-2 border-[#CCFF00] py-3 text-center text-xs font-black uppercase tracking-widest text-[#CCFF00] transition-colors hover:bg-[#CCFF00] hover:text-black"
+          className="block w-full border-2 border-black bg-[#CCFF00] py-3 text-center text-xs font-black uppercase tracking-widest text-black transition-colors hover:bg-black hover:text-white"
         >
           CRÉER UN EVENT →
         </Link>
@@ -196,17 +192,15 @@ export default function ExplorePage() {
   const confirmed = matches.filter((m) => m.response_a === 'accepted' && m.response_b === 'accepted')
 
   return (
-    <div className="h-full overflow-y-auto bg-black">
-      {/* Header */}
-      <div className="sticky top-0 z-10 border-b-2 border-[#333333] bg-black px-4 pt-6 pb-4">
-        <h1 className="mb-1 text-[40px] font-black uppercase leading-none tracking-tight text-white">
+    <div className="h-full overflow-y-auto bg-white">
+      <div className="sticky top-0 z-10 border-b-2 border-black bg-white px-4 pt-6 pb-4">
+        <h1 className="mb-1 text-[40px] font-black uppercase leading-none tracking-tight text-black">
           MATCHS
         </h1>
-        <p className="text-xs text-[#555555]">Créneaux en commun avec tes cercles</p>
+        <p className="text-xs text-[#888888]">Créneaux en commun avec tes cercles</p>
       </div>
 
       <div className="px-4 pb-28 pt-4 flex flex-col gap-4">
-        {/* Run button */}
         <button
           onClick={runMatching}
           disabled={running}
@@ -216,21 +210,20 @@ export default function ExplorePage() {
         </button>
 
         {runResult && (
-          <p className="text-xs font-bold uppercase tracking-widest text-[#CCFF00]">
+          <p className="text-xs font-black uppercase tracking-widest text-black">
             {runResult}
           </p>
         )}
 
         {loading ? (
-          <p className="pt-8 text-center text-xs font-bold uppercase tracking-widest text-[#555555]">
+          <p className="pt-8 text-center text-xs font-black uppercase tracking-widest text-[#AAAAAA]">
             CHARGEMENT...
           </p>
         ) : (
           <>
-            {/* Confirmed matches */}
             {confirmed.length > 0 && (
               <div>
-                <p className="mb-3 text-[10px] font-black uppercase tracking-widest text-[#CCFF00]">
+                <p className="mb-3 text-[10px] font-black uppercase tracking-widest text-black">
                   CONFIRMÉS ({confirmed.length})
                 </p>
                 <div className="flex flex-col gap-3">
@@ -241,10 +234,9 @@ export default function ExplorePage() {
               </div>
             )}
 
-            {/* Pending matches */}
             {pending.length > 0 && (
               <div>
-                <p className="mb-3 text-[10px] font-black uppercase tracking-widest text-[#999999]">
+                <p className="mb-3 text-[10px] font-black uppercase tracking-widest text-[#888888]">
                   EN ATTENTE ({pending.length})
                 </p>
                 <div className="flex flex-col gap-3">
@@ -257,16 +249,16 @@ export default function ExplorePage() {
 
             {confirmed.length === 0 && pending.length === 0 && (
               <div className="pt-12 text-center">
-                <p className="text-4xl font-black text-[#222222]">0</p>
-                <p className="mt-3 text-xs font-bold uppercase tracking-widest text-[#444444]">
+                <p className="text-4xl font-black text-[#E5E5E5]">0</p>
+                <p className="mt-3 text-xs font-black uppercase tracking-widest text-[#AAAAAA]">
                   Aucun créneau commun trouvé
                 </p>
-                <p className="mt-2 text-[11px] text-[#333333]">
+                <p className="mt-2 text-[11px] text-[#CCCCCC]">
                   Ajoute des créneaux et clique sur "Chercher des matchs"
                 </p>
                 <Link
                   href="/slots"
-                  className="mt-6 inline-block border-2 border-[#333333] px-4 py-2 text-xs font-black uppercase tracking-widest text-[#999999] hover:border-[#CCFF00] hover:text-[#CCFF00]"
+                  className="mt-6 inline-block border-2 border-black px-4 py-2 text-xs font-black uppercase tracking-widest text-black hover:bg-black hover:text-white transition-colors"
                 >
                   MES CRÉNEAUX →
                 </Link>
