@@ -79,18 +79,28 @@ function InviteModal({ circles, onClose }: { circles: Circle[]; onClose: () => v
   const [url, setUrl] = useState('')
   const [loading, setLoading] = useState(false)
   const [copied, setCopied] = useState(false)
+  const [genError, setGenError] = useState('')
 
   async function generateLink(circle: Circle) {
     setSelectedCircle(circle)
     setLoading(true)
+    setGenError('')
     setStep('link')
-    const res = await fetch('/api/invitations', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ circle_id: circle.id }),
-    })
-    const data = await res.json()
-    setUrl(data.url ?? '')
+    try {
+      const res = await fetch('/api/invitations', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ circle_id: circle.id }),
+      })
+      const data = await res.json()
+      if (!res.ok) {
+        setGenError(data.error ?? `Erreur ${res.status}`)
+      } else {
+        setUrl(data.url ?? '')
+      }
+    } catch {
+      setGenError('Erreur réseau')
+    }
     setLoading(false)
   }
 
@@ -143,6 +153,18 @@ function InviteModal({ circles, onClose }: { circles: Circle[]; onClose: () => v
               <p className="text-xs font-black uppercase tracking-widest text-[#AAAAAA]">
                 GÉNÉRATION...
               </p>
+            ) : genError ? (
+              <>
+                <p className="mb-4 text-xs font-black uppercase tracking-widest text-red-500">
+                  ERREUR : {genError}
+                </p>
+                <button
+                  onClick={() => { setStep('pick'); setGenError('') }}
+                  className="w-full border-2 border-black px-4 py-3 text-xs font-black uppercase tracking-widest text-black hover:bg-[#F5F5F5] transition-colors"
+                >
+                  ← RÉESSAYER
+                </button>
+              </>
             ) : (
               <>
                 <p className="mb-4 break-all border-2 border-black bg-[#F5F5F5] px-3 py-2 text-[11px] font-bold text-black">
