@@ -66,14 +66,14 @@ function AvatarBubble({ name, url }: { name: string; url: string | null }) {
       <img
         src={url}
         alt={name}
-        className="h-8 w-8 rounded-full border-2 border-[#333333] object-cover"
+        className="h-8 w-8 rounded-full border-2 border-black object-cover"
         title={name}
       />
     )
   }
   return (
     <div
-      className="flex h-8 w-8 items-center justify-center rounded-full border-2 border-[#333333] bg-[#1A1A1A] text-xs font-black text-white"
+      className="flex h-8 w-8 items-center justify-center rounded-full border-2 border-black bg-[#F5F5F5] text-xs font-black text-black"
       title={name}
     >
       {name.charAt(0)}
@@ -114,8 +114,8 @@ export default function EventDetailPage({
 
   if (loading) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-black">
-        <p className="text-xs font-bold uppercase tracking-widest text-[#999999]">
+      <div className="flex min-h-screen items-center justify-center bg-white">
+        <p className="text-xs font-black uppercase tracking-widest text-[#AAAAAA]">
           CHARGEMENT...
         </p>
       </div>
@@ -124,9 +124,9 @@ export default function EventDetailPage({
 
   if (!event) {
     return (
-      <div className="flex min-h-screen flex-col items-center justify-center bg-black gap-4">
-        <p className="text-4xl font-black uppercase text-[#333333]">404.</p>
-        <button onClick={() => router.back()} className="text-xs font-bold uppercase tracking-widest text-[#CCFF00]">
+      <div className="flex min-h-screen flex-col items-center justify-center bg-white gap-4">
+        <p className="text-4xl font-black uppercase text-[#E5E5E5]">404.</p>
+        <button onClick={() => router.back()} className="text-xs font-black uppercase tracking-widest text-black hover:text-[#888888]">
           ← RETOUR
         </button>
       </div>
@@ -189,21 +189,21 @@ export default function EventDetailPage({
   const confirmedParticipants = event.participants.filter((p) => p.status === 'confirmed')
 
   return (
-    <div className="h-full overflow-y-auto bg-black px-4 pb-32 pt-6">
+    <div className="h-full overflow-y-auto bg-white px-4 pb-32 pt-6">
       <div className="mx-auto max-w-[375px]">
         {/* Header */}
         <div className="mb-6 flex items-center justify-between">
           <button
             onClick={() => router.back()}
-            className="text-xs font-bold uppercase tracking-widest text-[#999999] hover:text-white"
+            className="text-xs font-black uppercase tracking-widest text-[#888888] hover:text-black"
           >
             ← RETOUR
           </button>
           <div className="flex gap-2">
-            <span className="border border-[#CCFF00] px-2 py-1 text-[10px] font-black uppercase tracking-widest text-[#CCFF00]">
+            <span className="border-2 border-black bg-[#CCFF00] px-2 py-1 text-[10px] font-black uppercase tracking-widest text-black">
               {MOOD_LABELS[event.mood]}
             </span>
-            <span className="border border-[#333333] px-2 py-1 text-[10px] font-bold uppercase tracking-widest text-[#999999]">
+            <span className="border-2 border-black px-2 py-1 text-[10px] font-black uppercase tracking-widest text-black">
               {event.type === 'planned' ? 'PLANIFIÉ' : 'MAINTENANT'}
             </span>
           </div>
@@ -211,33 +211,31 @@ export default function EventDetailPage({
 
         {/* Status banner */}
         {event.status === 'cancelled' && (
-          <div className="mb-6 border-2 border-red-500 bg-red-500/10 px-4 py-3">
+          <div className="mb-6 border-2 border-red-500 bg-red-50 px-4 py-3">
             <p className="text-xs font-black uppercase tracking-widest text-red-500">
               ANNULÉ
             </p>
           </div>
         )}
         {isExpired && event.status !== 'cancelled' && (
-          <div className="mb-6 border-2 border-[#333333] px-4 py-3">
-            <p className="text-xs font-black uppercase tracking-widest text-[#999999]">
+          <div className="mb-6 border-2 border-black bg-[#F5F5F5] px-4 py-3">
+            <p className="text-xs font-black uppercase tracking-widest text-[#888888]">
               EXPIRÉ
             </p>
           </div>
         )}
 
         {/* Main card */}
-        <div className="mb-6 border-2 border-[#333333] bg-[#1A1A1A] shadow-[4px_4px_0_0_#CCFF00] p-5">
-          {/* Title */}
-          <h1 className="mb-4 text-3xl font-black uppercase leading-tight text-white">
+        <div className="mb-6 border-2 border-black bg-white shadow-[4px_4px_0_0_#000] p-5">
+          <h1 className="mb-4 text-3xl font-black uppercase leading-tight text-black">
             {event.title ?? MOOD_LABELS[event.mood]}
           </h1>
 
-          {/* Date/time */}
           {event.type === 'planned' && event.date && (
-            <p className="mb-1 text-sm font-bold text-[#999999]">
+            <p className="mb-1 text-sm font-bold text-[#666666]">
               {formatDate(event.date)}
               {event.start_time && (
-                <span className="text-white">
+                <span className="text-black">
                   {' '}· {event.start_time.slice(0, 5)}
                   {event.end_time ? ` – ${event.end_time.slice(0, 5)}` : ''}
                 </span>
@@ -245,17 +243,16 @@ export default function EventDetailPage({
             </p>
           )}
           {event.type === 'spontaneous' && (
-            <p className="mb-1 text-sm font-black uppercase tracking-widest text-[#CCFF00]">
-              {timeRemaining(event.created_at)}
+            <p className="mb-1 text-sm font-black uppercase tracking-widest text-black">
+              ⚡ {timeRemaining(event.created_at)}
             </p>
           )}
 
-          {/* Location */}
           {event.arrondissement && (
-            <p className="mb-1 text-sm font-bold uppercase text-white">
+            <p className="mb-1 text-sm font-bold uppercase text-black">
               Paris {ARRONDISSEMENT_LABELS[event.arrondissement]}
               {event.location_name && (
-                <span className="font-normal text-[#999999]"> · {event.location_name}</span>
+                <span className="font-normal text-[#666666]"> · {event.location_name}</span>
               )}
             </p>
           )}
@@ -264,7 +261,7 @@ export default function EventDetailPage({
               href={event.location_url}
               target="_blank"
               rel="noopener noreferrer"
-              className="text-xs font-bold uppercase tracking-widest text-[#CCFF00] underline"
+              className="text-xs font-black uppercase tracking-widest text-black underline"
             >
               VOIR LE LIEU →
             </a>
@@ -274,10 +271,10 @@ export default function EventDetailPage({
         {/* Participants */}
         <div className="mb-6">
           <div className="mb-3 flex items-center justify-between">
-            <p className="text-xs font-bold uppercase tracking-widest text-[#999999]">
+            <p className="text-xs font-black uppercase tracking-widest text-[#888888]">
               PARTICIPANTS
             </p>
-            <p className="text-xs font-black text-white">
+            <p className="text-xs font-black text-black">
               {confirmedCount}
               {event.max_participants ? `/${event.max_participants}` : ''}
             </p>
@@ -298,13 +295,13 @@ export default function EventDetailPage({
               ))}
             </div>
           ) : (
-            <p className="text-xs text-[#555555]">Aucun participant confirmé.</p>
+            <p className="text-xs text-[#AAAAAA]">Aucun participant confirmé.</p>
           )}
         </div>
 
         {/* Error */}
         {error && (
-          <p className="mb-4 text-xs font-bold uppercase tracking-wider text-red-500">{error}</p>
+          <p className="mb-4 text-xs font-black uppercase tracking-wider text-red-500">{error}</p>
         )}
 
         {/* Actions */}
@@ -324,7 +321,7 @@ export default function EventDetailPage({
               <button
                 onClick={handleLeave}
                 disabled={actionLoading}
-                className="border-2 border-[#333333] bg-transparent px-6 py-4 text-sm font-black uppercase tracking-widest text-[#999999] transition-colors hover:border-red-500 hover:text-red-500 disabled:opacity-40"
+                className="border-2 border-black bg-white px-6 py-4 text-sm font-black uppercase tracking-widest text-black transition-colors hover:border-red-500 hover:text-red-500 disabled:opacity-40"
               >
                 {actionLoading ? '...' : 'SE DÉSINSCRIRE'}
               </button>
@@ -334,16 +331,16 @@ export default function EventDetailPage({
               <button
                 onClick={handleCancel}
                 disabled={actionLoading}
-                className="border-2 border-[#333333] bg-transparent px-6 py-4 text-sm font-black uppercase tracking-widest text-[#999999] transition-colors hover:border-red-500 hover:text-red-500 disabled:opacity-40"
+                className="border-2 border-black bg-white px-6 py-4 text-sm font-black uppercase tracking-widest text-black transition-colors hover:border-red-500 hover:text-red-500 disabled:opacity-40"
               >
-                {actionLoading ? '...' : 'ANNULER L\'ÉVÉNEMENT'}
+                {actionLoading ? '...' : "ANNULER L'ÉVÉNEMENT"}
               </button>
             )}
           </div>
         )}
 
         {isCreator && event.status === 'open' && (
-          <p className="mt-3 text-center text-xs text-[#555555]">
+          <p className="mt-3 text-center text-xs text-[#AAAAAA]">
             Tu es l'organisateur·rice.
           </p>
         )}
