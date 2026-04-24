@@ -27,7 +27,7 @@ export async function GET() {
 
   if (error) {
     console.error('[circles GET]', error)
-    return NextResponse.json({ error: 'Failed to fetch circles' }, { status: 500 })
+    return NextResponse.json({ error: error.message, code: error.code, details: error.details }, { status: 500 })
   }
 
   // Auto-create default circles if user has none (e.g. onboarding completed before this logic)
