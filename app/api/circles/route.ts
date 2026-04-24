@@ -18,8 +18,7 @@ export async function GET() {
       circle_members (
         profile_id,
         profiles (
-          id, first_name, last_name_init, avatar_url,
-          is_online, preferred_moods, preferred_arrondissements, usual_availability
+          id, first_name, last_name_init, avatar_url, is_online
         )
       )
     `)
@@ -49,7 +48,7 @@ export async function GET() {
     }
     const { data: fresh } = await supabase
       .from('circles')
-      .select(`id, name, type, owner_id, created_at, circle_members(profile_id, profiles(id, first_name, last_name_init, avatar_url, is_online, preferred_moods, preferred_arrondissements, usual_availability))`)
+      .select(`id, name, type, owner_id, created_at, circle_members(profile_id, profiles(id, first_name, last_name_init, avatar_url, is_online))`)
       .order('created_at')
     return NextResponse.json(fresh ?? [])
   }
