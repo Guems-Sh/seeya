@@ -135,10 +135,17 @@ export default function ProfilePage() {
 
   async function generateInvite() {
     setInviteLoading(true)
-    const res = await fetch('/api/invitations', { method: 'POST', body: '{}', headers: { 'Content-Type': 'application/json' } })
-    if (res.ok) {
+    try {
+      const res = await fetch('/api/invitations', { method: 'POST', body: '{}', headers: { 'Content-Type': 'application/json' } })
       const data = await res.json()
-      setInviteUrl(data.url)
+      if (res.ok) {
+        setInviteUrl(data.url ?? '')
+      } else {
+        console.error('[generateInvite]', data.error)
+        setInviteUrl('ERREUR: ' + (data.error ?? res.status))
+      }
+    } catch (e) {
+      console.error('[generateInvite]', e)
     }
     setInviteLoading(false)
   }
