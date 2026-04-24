@@ -201,10 +201,20 @@ export default function CirclesPage() {
   const [circles, setCircles] = useState<Circle[]>([])
   const [myId, setMyId] = useState<string | null>(null)
   const [loading, setLoading] = useState(true)
+  const [error, setError] = useState('')
 
   const load = useCallback(async () => {
-    const res = await fetch('/api/circles')
-    if (res.ok) setCircles(await res.json())
+    try {
+      const res = await fetch('/api/circles')
+      const data = await res.json()
+      if (res.ok) {
+        setCircles(data)
+      } else {
+        setError(data.error ?? `Erreur ${res.status}`)
+      }
+    } catch (e) {
+      setError(String(e))
+    }
     setLoading(false)
   }, [])
 
@@ -216,7 +226,7 @@ export default function CirclesPage() {
 
   return (
     <div className="h-full overflow-y-auto bg-white px-4 pb-32 pt-8">
-      <div className="mx-auto max-w-93.75">
+      <div className="mx-auto max-w-[375px]">
         <h1 className="mb-8 text-[56px] font-black uppercase leading-none tracking-tight text-black">
           MES<br />CERCLES
         </h1>
@@ -224,6 +234,10 @@ export default function CirclesPage() {
         {loading ? (
           <p className="text-xs font-black uppercase tracking-widest text-[#AAAAAA]">
             CHARGEMENT...
+          </p>
+        ) : error ? (
+          <p className="text-xs font-black uppercase tracking-widest text-red-500">
+            ERREUR : {error}
           </p>
         ) : circles.length === 0 ? (
           <p className="text-xs font-black uppercase tracking-widest text-[#AAAAAA]">
