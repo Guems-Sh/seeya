@@ -9,6 +9,7 @@ interface InvitationInfo {
   inviter_name?: string
   circle_name?: string
   circle_id?: string
+  debug?: string
 }
 
 export default function JoinPage() {
@@ -85,6 +86,9 @@ function JoinContent() {
           LIEN<br />EXPIRÉ.
         </h1>
         <p className="text-sm text-[#666666]">Demande un nouveau lien à ton ami.</p>
+        {info.debug && (
+          <p className="mt-4 text-[10px] font-mono text-red-400 break-all">{info.debug}</p>
+        )}
       </div>
     )
   }

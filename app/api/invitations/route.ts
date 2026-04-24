@@ -22,10 +22,10 @@ export async function GET(request: NextRequest) {
 
   if (error) {
     console.error('[invitations GET]', error)
-    return NextResponse.json({ valid: false }, { status: 500 })
+    return NextResponse.json({ valid: false, debug: error.message }, { status: 500 })
   }
 
-  return NextResponse.json(data)
+  return NextResponse.json(data ?? { valid: false, debug: 'null data' })
 }
 
 export async function POST(request: NextRequest) {
