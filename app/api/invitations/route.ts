@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
+import { randomBytes } from 'crypto'
 import { z } from 'zod'
 import { createClient } from '@/lib/supabase/server'
 
@@ -51,11 +52,13 @@ export async function POST(request: NextRequest) {
   }
 
   const { circle_id } = parsed.data
+  const token = randomBytes(24).toString('base64url')
 
   const { data, error } = await supabase
     .from('invitations')
     .insert({
       created_by: user.id,
+      token,
       ...(circle_id ? { circle_id } : {}),
     })
     .select('token, expires_at')
