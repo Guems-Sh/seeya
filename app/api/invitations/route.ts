@@ -3,6 +3,7 @@ import type { NextRequest } from 'next/server'
 import { randomBytes } from 'crypto'
 import { z } from 'zod'
 import { createClient } from '@/lib/supabase/server'
+import { createServiceClient } from '@/lib/supabase/service'
 
 const createSchema = z.object({
   circle_id: z.string().uuid().optional(),
@@ -15,17 +16,41 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({ valid: false }, { status: 400 })
   }
 
-  const supabase = await createClient()
-  const { data, error } = await supabase.rpc('get_invitation_info', {
-    p_token: token,
-  })
+  const supabase = createServiceClient()
+  const { data: inv, error } = await supabase
+    .from('invitations')
+    .select('id, created_by, circle_id, expires_at, uses_count')
+    .eq('token', token)
+    .single()
 
-  if (error) {
-    console.error('[invitations GET]', error)
-    return NextResponse.json({ valid: false, debug: error.message }, { status: 500 })
+  if (error || !inv) {
+    return NextResponse.json({ valid: false, debug: error?.message ?? 'not found' })
   }
 
-  return NextResponse.json(data ?? { valid: false, debug: 'null data' })
+  if (inv.expires_at && new Date(inv.expires_at) < new Date()) {
+    return NextResponse.json({ valid: false, debug: 'expired' })
+  }
+
+  if ((inv.uses_count ?? 0) >= 10) {
+    return NextResponse.json({ valid: false, debug: 'exhausted' })
+  }
+
+  // Fetch inviter name and circle name separately
+  const [profileRes, circleRes] = await Promise.all([
+    supabase.from('profiles').select('first_name, last_name_init').eq('id', inv.created_by).single(),
+    inv.circle_id
+      ? supabase.from('circles').select('name').eq('id', inv.circle_id).single()
+      : Promise.resolve({ data: null, error: null }),
+  ])
+
+  return NextResponse.json({
+    valid: true,
+    inviter_name: profileRes.data
+      ? `${profileRes.data.first_name} ${profileRes.data.last_name_init}`
+      : '',
+    circle_name: circleRes.data?.name ?? null,
+    circle_id: inv.circle_id ?? null,
+  })
 }
 
 export async function POST(request: NextRequest) {
