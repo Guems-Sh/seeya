@@ -72,9 +72,6 @@ export default function ProfilePage() {
   const [profile, setProfile] = useState<Profile | null>(null)
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
-  const [inviteUrl, setInviteUrl] = useState('')
-  const [inviteLoading, setInviteLoading] = useState(false)
-  const [copied, setCopied] = useState(false)
 
   useEffect(() => {
     async function load() {
@@ -133,28 +130,6 @@ export default function ProfilePage() {
     patch({ location_sharing: v })
   }
 
-  async function generateInvite() {
-    setInviteLoading(true)
-    try {
-      const res = await fetch('/api/invitations', { method: 'POST', body: '{}', headers: { 'Content-Type': 'application/json' } })
-      const data = await res.json()
-      if (res.ok) {
-        setInviteUrl(data.url ?? '')
-      } else {
-        console.error('[generateInvite]', data.error)
-        setInviteUrl('ERREUR: ' + (data.error ?? res.status))
-      }
-    } catch (e) {
-      console.error('[generateInvite]', e)
-    }
-    setInviteLoading(false)
-  }
-
-  async function copyInvite() {
-    await navigator.clipboard.writeText(inviteUrl)
-    setCopied(true)
-    setTimeout(() => setCopied(false), 2000)
-  }
 
   async function signOut() {
     const supabase = createClient()
@@ -293,36 +268,6 @@ export default function ProfilePage() {
               </button>
             ))}
           </div>
-        </div>
-
-        {/* Invitation */}
-        <div className="border-2 border-black p-4">
-          <p className="mb-1 text-xs font-black uppercase tracking-widest text-[#666666]">INVITER UN AMI</p>
-          <p className="mb-4 text-[11px] text-[#888888]">
-            Génère un lien unique — valable 7 jours.
-          </p>
-
-          {inviteUrl ? (
-            <div className="flex flex-col gap-2">
-              <p className="break-all border-2 border-black bg-[#F5F5F5] px-3 py-2 text-[11px] font-bold text-black">
-                {inviteUrl}
-              </p>
-              <button
-                onClick={copyInvite}
-                className="border-2 border-black bg-[#CCFF00] py-3 text-xs font-black uppercase tracking-widest text-black shadow-[4px_4px_0_0_#000] transition-all hover:shadow-none"
-              >
-                {copied ? 'COPIÉ ✓' : 'COPIER LE LIEN'}
-              </button>
-            </div>
-          ) : (
-            <button
-              onClick={generateInvite}
-              disabled={inviteLoading}
-              className="w-full border-2 border-black bg-white py-3 text-xs font-black uppercase tracking-widest text-black transition-colors hover:bg-black hover:text-white disabled:opacity-40"
-            >
-              {inviteLoading ? '...' : 'GÉNÉRER UN LIEN →'}
-            </button>
-          )}
         </div>
 
         {/* Slots */}

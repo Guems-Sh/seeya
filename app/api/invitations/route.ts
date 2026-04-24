@@ -63,7 +63,7 @@ export async function POST(request: NextRequest) {
 
   if (error) {
     console.error('[invitations POST]', error)
-    return NextResponse.json({ error: 'Failed to create invitation' }, { status: 500 })
+    return NextResponse.json({ error: error.message, code: error.code }, { status: 500 })
   }
 
   const url = `${request.nextUrl.origin}/join?token=${data.token}`
